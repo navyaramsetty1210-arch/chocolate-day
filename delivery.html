@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delivery + Fun Quiz Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-indigo-100 to-purple-100 min-h-screen flex items-center justify-center p-6">
+
+  <!-- MAIN CARD -->
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-xl p-8 text-center">
+
+    <!-- HEADER -->
+    <h1 class="text-3xl font-bold text-indigo-700 mb-4">📦 Smart Delivery Tracker</h1>
+
+    <!-- TRACKING SECTION -->
+    <div id="trackingSection">
+      <p class="text-gray-600 mb-6">Track your delivery and unlock a fun quiz while you wait!</p>
+
+      <input
+        id="trackingInput"
+        type="text"
+        placeholder="Enter Tracking ID"
+        class="w-full border-2 border-indigo-200 rounded-xl px-4 py-3 mb-4 focus:outline-none focus:border-indigo-500"
+      />
+
+      <button
+        onclick="trackDelivery()"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl w-full font-semibold transition"
+      >
+        Track Delivery
+      </button>
+
+      <div id="trackingResult" class="mt-6 hidden">
+        <p class="text-lg font-semibold text-green-600">🚚 Out For Delivery</p>
+        <p class="text-gray-500 text-sm">Expected Arrival: Today 6 PM</p>
+
+        <button
+          onclick="startQuiz()"
+          class="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition"
+        >
+          🎮 Play Waiting Quiz
+        </button>
+      </div>
+    </div>
+
+    <!-- QUIZ SECTION -->
+    <div id="quizSection" class="hidden">
+      <h2 class="text-2xl font-bold text-purple-700 mb-4">🧠 Quick Fun Quiz</h2>
+
+      <div id="questionBox" class="text-lg font-semibold mb-6"></div>
+
+      <div id="optionsBox" class="grid gap-3"></div>
+
+      <button
+        onclick="finishQuiz()"
+        class="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition"
+      >
+        Finish Quiz
+      </button>
+    </div>
+
+    <!-- SCORE SECTION -->
+    <div id="scoreSection" class="hidden">
+      <h2 class="text-2xl font-bold text-green-600 mb-4">🎉 Quiz Completed!</h2>
+      <p id="scoreText" class="text-lg font-semibold"></p>
+
+      <button
+        onclick="goBack()"
+        class="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition"
+      >
+        Back to Tracking
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    function trackDelivery() {
+      const input = document.getElementById("trackingInput").value.trim();
+      if (!input) {
+        alert("Please enter Tracking ID");
+        return;
+      }
+      document.getElementById("trackingResult").classList.remove("hidden");
+    }
+
+    const quizData = [
+      {
+        q: "Which language is used with Flask?",
+        options: ["Java", "Python", "C++", "Go"],
+        answer: "Python"
+      },
+      {
+        q: "HTML stands for?",
+        options: ["Hyper Text Markup Language", "High Transfer Machine Language", "Hyper Tool ML", "None"],
+        answer: "Hyper Text Markup Language"
+      },
+      {
+        q: "Which is used for styling?",
+        options: ["HTML", "Python", "CSS", "SQL"],
+        answer: "CSS"
+      }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    function startQuiz() {
+      document.getElementById("trackingSection").classList.add("hidden");
+      document.getElementById("quizSection").classList.remove("hidden");
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      if (currentQ >= quizData.length) {
+        finishQuiz();
+        return;
+      }
+
+      const q = quizData[currentQ];
+      document.getElementById("questionBox").innerText = q.q;
+
+      const optionsBox = document.getElementById("optionsBox");
+      optionsBox.innerHTML = "";
+
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.className = "bg-indigo-100 hover:bg-indigo-200 px-4 py-3 rounded-xl font-semibold transition";
+        btn.onclick = () => selectAnswer(opt);
+        optionsBox.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(selected) {
+      if (selected === quizData[currentQ].answer) score++;
+      currentQ++;
+      loadQuestion();
+    }
+
+    function finishQuiz() {
+  document.getElementById("quizSection").classList.add("hidden");
+  document.getElementById("scoreSection").classList.remove("hidden");
+  document.getElementById("scoreText").innerText =
+    `Your Score: ${score} / ${quizData.length}`;
+
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 3000); // 3 sec delay
+}
+
+
+
+    function goBack() {
+      currentQ = 0;
+      score = 0;
+      document.getElementById("scoreSection").classList.add("hidden");
+      document.getElementById("trackingSection").classList.remove("hidden");
+      document.getElementById("trackingResult").classList.add("hidden");
+    }
+  </script>
+
+</body>
+</html>

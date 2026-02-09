@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chocolate Quiz 💖</title>
+
+<style>
+body{
+font-family:Poppins,sans-serif;
+background:#fff0f5 url("photo8.jpg") center/cover fixed;
+text-align:center;
+overflow-x:hidden;
+}
+
+/* TYPEWRITER SCREEN */
+#openingScreen{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#fff0f5;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:2.5em;
+z-index:999;
+}
+
+/* HEART FLOAT */
+.heart{
+position:fixed;
+color:red;
+font-size:20px;
+animation:floatUp linear forwards;
+}
+
+@keyframes floatUp{
+from{transform:translateY(100vh);opacity:1;}
+to{transform:translateY(-10vh);opacity:0;}
+}
+
+/* QUIZ UI */
+.question{
+background:rgba(255,255,255,0.85);
+padding:20px;
+border-radius:15px;
+margin:20px;
+}
+
+button{
+background:#d2691e;
+color:white;
+padding:12px 20px;
+border:none;
+border-radius:10px;
+margin:5px;
+cursor:pointer;
+}
+
+#loveLetter,#bonusSection,#bonusGift,#secretMsg{
+display:none;
+background:rgba(255,228,225,0.95);
+padding:25px;
+border-radius:15px;
+margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" autoplay loop>
+<source src="love.mp3" type="audio/mp3">
+</audio>
+
+<div id="openingScreen">
+<span id="typeText"></span>
+</div>
+
+<h1>🍫 Chocolate Quiz 🍫</h1>
+
+<div id="quizContainer">
+<div id="score">Score: 0%</div>
+<div id="timer">Time Left: 30s</div>
+<div class="question" id="question"></div>
+<div id="options"></div>
+</div>
+
+<div id="loveLetter">
+<h2>💌 Love Letter 💌</h2>
+<p>happy chocolate day bava 🍫💖.......i hope you answered everything is right......i'll always be with you</p>
+<p>thank you for being with me for these 2 years ..waste fellow(bava),we will stay stronger like this even we are in our old times
+</p>
+<p>iiiiii.......lllooooovvvveeee......yyyyooooouuuuu......bbaaaavvvaaa....</p>
+<button onclick="showSecret()">Open Secret 💖</button>
+</div>
+
+<div id="secretMsg">
+<p>You are my forever person bava ❤️</p>
+<button onclick="showBonus()">Unlock Surprise 🎁</button>
+</div>
+
+<div id="bonusSection">
+<h3>Bonus Question</h3>
+<div id="bonusQuestion"></div>
+<div id="bonusOptions"></div>
+</div>
+
+<div id="bonusGift">
+<h2>🎁 i'm your Surprise Chocolate bava you can eat it🎁</h2>
+<img src="photo4.jpg" width="250">
+</div>
+
+<script>
+
+/* TYPEWRITER */
+const text="🍫 Happy Chocolate Day Bava 💖";
+let i=0;
+function typeWriter(){
+if(i<text.length){
+document.getElementById("typeText").innerHTML+=text.charAt(i);
+i++;
+setTimeout(typeWriter,80);
+}else{
+setTimeout(()=>{
+document.getElementById("openingScreen").style.display="none";
+showQuestion();
+},1500);
+}
+}
+typeWriter();
+
+/* HEART FLOAT */
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="💖";
+heart.style.left=Math.random()*window.innerWidth+"px";
+heart.style.animationDuration=(4+Math.random()*3)+"s";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),7000);
+},400);
+
+/* QUIZ DATA */
+const quiz=[
+{q: "What ill call you always?", options: ["bava", "waste fellow", "baby", "honey"], answer: 1},
+{q: "What is my go-to comfort food when I’ve had a bad day?", options: ["kfc", "birayani", "noodles", "chicken soup"], answer: 1}, 
+{q: "What is the one thing I've always wanted to try but haven't yet", options: ["be with you", "stay home", "night out", "beat you"], answer: 2}, 
+{q: "What is my shoe size??", options: ["8", "10", "7", "9"], answer: 0}, 
+{q: "Where was our first kiss?", options: ["in college", "IT junction", "on bike", "none"], answer: 1}, 
+{q: "Who is more likely to get hungry?", options: ["you", "me", "both"], answer: 2}, 
+{q: "Who is more likely to start dancing out of nowhere?", options: ["me", "you"], answer: 1}, 
+{q: "Who is more likely to sing in the shower?", options: ["me", "you", "both"], answer: 2}, 
+{q: "Who takes longer to get ready?", options: ["me", "you"], answer: 1}, 
+{q: "what is the password of my private fOlder in gallery", options: ["121003", "010404", "120116", "121004"], answer: 2} ];
+
+const bonusQ={
+q:"Secret folder password?",
+options:["121003", "120116", "010404","121004"],
+answer:1
+};
+
+let current=0,score=0,time=30,timer;
+
+function showQuestion(){
+if(current>=quiz.length){finishQuiz();return;}
+
+let q=quiz[current];
+document.getElementById("question").innerText=q.q;
+
+let opt=document.getElementById("options");
+opt.innerHTML="";
+
+q.options.forEach((o,i)=>{
+let b=document.createElement("button");
+b.innerText=o;
+b.onclick=()=>selectAnswer(i);
+opt.appendChild(b);
+});
+
+startTimer();
+}
+
+function selectAnswer(i){
+clearInterval(timer);
+if(i===quiz[current].answer) score+=30;
+document.getElementById("score").innerText="Score: "+score+"%";
+current++;
+showQuestion();
+}
+
+function startTimer(){
+time=30;
+document.getElementById("timer").innerText="Time Left: "+time+"s";
+
+timer=setInterval(()=>{
+time--;
+document.getElementById("timer").innerText="Time Left: "+time+"s";
+if(time<=0){
+clearInterval(timer);
+current++;
+showQuestion();
+}
+},1000);
+}
+
+function finishQuiz(){
+document.getElementById("quizContainer").style.display="none";
+if(score>=60){
+document.getElementById("loveLetter").style.display="block";
+}else{
+document.body.innerHTML="<h1>Try again 💔</h1>";
+}
+}
+
+/* SECRET FLOW */
+function showSecret(){
+document.getElementById("secretMsg").style.display="block";
+}
+
+function showBonus(){
+document.getElementById("bonusSection").style.display="block";
+
+document.getElementById("bonusQuestion").innerText=bonusQ.q;
+
+let div=document.getElementById("bonusOptions");
+div.innerHTML="";
+
+bonusQ.options.forEach((o,i)=>{
+let b=document.createElement("button");
+b.innerText=o;
+b.onclick=()=>checkBonus(i);
+div.appendChild(b);
+});
+}
+
+function checkBonus(i){
+if(i===bonusQ.answer){
+document.getElementById("bonusGift").style.display="block";
+alert("You unlocked chocolate surprise 🍫💖");
+}else{
+alert("Wrong 😝");
+}
+}
+
+</script>
+</body>
+</html>
