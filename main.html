@@ -82,7 +82,6 @@ margin-top:20px;
 <h1>🍫 Chocolate Quiz 🍫</h1>
 
 <div id="quizContainer">
-<div id="score">Score: 0%</div>
 <div id="timer">Time Left: 30s</div>
 <div class="question" id="question"></div>
 <div id="options"></div>
@@ -90,9 +89,11 @@ margin-top:20px;
 
 <div id="loveLetter">
 <h2>💌 Love Letter 💌</h2>
-<p>happy chocolate day bava 🍫💖.......i hope you answered everything is right......i'll always be with you</p>
-<p>thank you for being with me for these 2 years ..waste fellow(bava),we will stay stronger like this even we are in our old times
-</p>
+<p>happy chocolate day bava 🍫💖</p>
+<p>i hope you answered everything right</p>
+<p>i'll always be with you ❤️</p>
+<p>thank you for being with me for these 2 years waste fellow(bava)</p>
+<p>we will stay stronger even in old age</p>
 <p>iiiiii.......lllooooovvvveeee......yyyyooooouuuuu......bbaaaavvvaaa....</p>
 <button onclick="showSecret()">Open Secret 💖</button>
 </div>
@@ -109,7 +110,7 @@ margin-top:20px;
 </div>
 
 <div id="bonusGift">
-<h2>🎁 i'm your Surprise Chocolate bava you can eat it🎁</h2>
+<h2>🎁 I'm your Surprise Chocolate bava 🎁</h2>
 <img src="photo4.jpg" width="250">
 </div>
 
@@ -145,24 +146,28 @@ setTimeout(()=>heart.remove(),7000);
 
 /* QUIZ DATA */
 const quiz=[
-{q: "What ill call you always?", options: ["bava", "waste fellow", "baby", "honey"], answer: 1},
-{q: "What is my go-to comfort food when I’ve had a bad day?", options: ["kfc", "birayani", "noodles", "chicken soup"], answer: 1}, 
-{q: "What is the one thing I've always wanted to try but haven't yet", options: ["be with you", "stay home", "night out", "beat you"], answer: 2}, 
-{q: "What is my shoe size??", options: ["8", "10", "7", "9"], answer: 0}, 
-{q: "Where was our first kiss?", options: ["in college", "IT junction", "on bike", "none"], answer: 1}, 
-{q: "Who is more likely to get hungry?", options: ["you", "me", "both"], answer: 2}, 
-{q: "Who is more likely to start dancing out of nowhere?", options: ["me", "you"], answer: 1}, 
-{q: "Who is more likely to sing in the shower?", options: ["me", "you", "both"], answer: 2}, 
-{q: "Who takes longer to get ready?", options: ["me", "you"], answer: 1}, 
-{q: "what is the password of my private fOlder in gallery", options: ["121003", "010404", "120116", "121004"], answer: 2} ];
+{q:"What ill call you always?",options:["bava","waste fellow","baby","honey"],answer:1},
+{q:"What is my comfort food?",options:["kfc","birayani","noodles","soup"],answer:1},
+{q:"What I want to try?",options:["be with you","stay home","night out","beat you"],answer:2},
+{q:"My shoe size?",options:["8","10","7","9"],answer:0},
+{q:"First kiss place?",options:["college","IT junction","bike","none"],answer:1},
+{q:"Who gets hungry more?",options:["you","me","both"],answer:2},
+{q:"Who dances randomly?",options:["me","you"],answer:1},
+{q:"Who sings in shower?",options:["me","you","both"],answer:2},
+{q:"Who takes longer to get ready?",options:["me","you"],answer:1},
+{q:"Gallery password?",options:["121003","010404","120116","121004"],answer:2}
+];
 
 const bonusQ={
 q:"Secret folder password?",
-options:["121003", "120116", "010404","121004"],
+options:["121003","120116","010404","121004"],
 answer:1
 };
 
-let current=0,score=0,time=30,timer;
+let current=0;
+let correctAnswers=0;
+let time=30;
+let timer;
 
 function showQuestion(){
 if(current>=quiz.length){finishQuiz();return;}
@@ -185,8 +190,7 @@ startTimer();
 
 function selectAnswer(i){
 clearInterval(timer);
-if(i===quiz[current].answer) score+=30;
-document.getElementById("score").innerText="Score: "+score+"%";
+if(i===quiz[current].answer){correctAnswers++;}
 current++;
 showQuestion();
 }
@@ -208,10 +212,11 @@ showQuestion();
 
 function finishQuiz(){
 document.getElementById("quizContainer").style.display="none";
-if(score>=270){
+
+if(correctAnswers===quiz.length){
 document.getElementById("loveLetter").style.display="block";
 }else{
-document.body.innerHTML="<h1>Try again 💔</h1>";
+document.body.innerHTML="<h1>😝 Oops Bava… Try Again 💔</h1>";
 }
 }
 
@@ -222,7 +227,6 @@ document.getElementById("secretMsg").style.display="block";
 
 function showBonus(){
 document.getElementById("bonusSection").style.display="block";
-
 document.getElementById("bonusQuestion").innerText=bonusQ.q;
 
 let div=document.getElementById("bonusOptions");
@@ -248,4 +252,3 @@ alert("Wrong 😝");
 </script>
 </body>
 </html>
-
